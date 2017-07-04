@@ -16,7 +16,7 @@ Let's assume your blog runs at mywordpressblog.example.com and your Node.js (thi
 ### I. Set up Wordpress
 
 1. Install Wordpress (if you haven't done so already)
-2. Install Wordpress plugin [WP OAuth Server] (https://wordpress.org/plugins/oauth2-provider/), free
+2. Install Wordpress plugin [WP OAuth Server](https://wordpress.org/plugins/oauth2-provider/), free
 3. Configure the WP Oauth Server plugin
   - in Wordpress admin panel (dashboard menu on the left), click OAuth Server, click Clients tab, click Add New Client
   - enter client name, e.g. My Node.js Site, enter Redirect URI, e.g. https://localhost:8080/auth/wordpress/callback
