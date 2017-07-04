@@ -1,27 +1,34 @@
-# Easy Node Authentication
+# Authenticate Node.js against your own Wordpress website
 
-Code for the entire scotch.io tutorial series: Complete Guide to Node Authentication
+Add Wordpress blog to your Node.js website (or vice versa), where user's Wordpress account automatically works in your Node.js.
+- single user account used both in your Wordpress and Node.js. No need to have separate Wordpress and Node.js user accounts.
+- when user visits your Node.js site, redirect user to your Wordpress site to enter username/password, then redirect back to your Node.js (just like authenticating against Google/Facebook/Twitter, but against your own Wordpress)
+- manage Node.js users in Wordpress
+- to be clear, authentication is against your own Wordpress site, not against wordpress.com
+- Node.js + Express.js + Passport.js + MongoDb + Wordpress
 
-We will be using Passport to authenticate users locally, with Facebook, Twitter, and Google.
-
-#### Upgraded To Express 4.0
-This tutorial has been upgraded to use ExpressJS 4.0. See [the commit](https://github.com/scotch-io/easy-node-authentication/commit/020dea057d5a0664caaeb041b18978237528f9a3) for specific changes.
+Based on [Getting Started and Local Authentication](http://scotch.io/tutorials/easy-node-authentication-setup-and-local) tutorial from scotch.io. Uses WP OAuth Server free plugin and passport-wordpress-oauth-server npm module.
 
 ## Instructions
 
-If you would like to download the code and try it for yourself:
+Let's assume your blog runs at mywordpressblog.example.com and your Node.js (this code) runs at http://localhost:8080/.
 
-1. Clone the repo: `git clone git@github.com:scotch-io/easy-node-authentication`
-2. Install packages: `npm install`
-3. Change out the database configuration in config/database.js
-4. Change out auth keys in config/auth.js
+### I. Set up Wordpress
+
+1. Install Wordpress (if you haven't done so already)
+2. Install Wordpress plugin [WP OAuth Server] (https://wordpress.org/plugins/oauth2-provider/), free
+3. Configure the WP Oauth Server plugin
+  - in Wordpress admin panel (dashboard menu on the left), click OAuth Server, click Clients tab, click Add New Client
+  - enter client name, e.g. My Node.js Site, enter Redirect URI, e.g. https://localhost:8080/auth/wordpress/callback
+  - once client is created, you will see a list of clients (containing only "My Node.js") - write down client ID, then mouse over "My Node.js", Show Secret link will appear, click Show Secret and write down your client secret
+
+### II. Set up Node.js
+1. Clone the repo: `git clone https://github.com/bfbca/easy-node-authentication`
+2. Install mongoDb on localhost (no admin/password), if you haven't done so already
+   Optionally, detailed database configuration is located in config/database.js
+3. Install packages: `cd easy-node-authentication`, then `npm install`
+4. Change auth keys in config/auth.js - insert client ID, client secret from WP OAuth Server plugin. Change out your Wordpress site URL and (if not localhost:8080) your Node.js site URL.
 5. Launch: `node server.js`
-6. Visit in your browser at: `http://localhost:8080`
+6. Open our browser at: `http://localhost:8080`
 
-## The Tutorials
-
-- [Getting Started and Local Authentication](http://scotch.io/tutorials/easy-node-authentication-setup-and-local)
-- [Facebook](http://scotch.io/tutorials/easy-node-authentication-facebook)
-- [Twitter](http://scotch.io/tutorials/easy-node-authentication-twitter)
-- [Google](http://scotch.io/tutorials/easy-node-authentication-google)
-- [Linking All Accounts Together](http://scotch.io/tutorials/easy-node-authentication-linking-all-accounts-together)
+For production, make sure Node.js and your blog run on https to make the authentication process secure.

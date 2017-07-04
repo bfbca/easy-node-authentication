@@ -76,6 +76,18 @@ module.exports = function(app, passport) {
             }));
 
 
+    // wordpress ---------------------------------
+
+        // send to google to do the authentication
+        app.get('/auth/wordpress', passport.authenticate('wordpress-oauth-server', { scope : ['profile', 'email'] }));
+
+        // the callback after wordpress has authenticated the user
+        app.get('/auth/wordpress/callback',
+            passport.authenticate('wordpress-oauth-server', {
+                successRedirect : '/profile',
+                failureRedirect : '/'
+            }));
+
     // google ---------------------------------
 
         // send to google to do the authentication
@@ -127,6 +139,18 @@ module.exports = function(app, passport) {
             }));
 
 
+    // wordpress ---------------------------------
+
+        // send to wordpress to do the authentication
+        app.get('/connect/wordpress', passport.authorize('wordpress-oauth-server', { scope : ['profile', 'email'] }));
+
+        // the callback after google has authorized the user
+        app.get('/connect/wordpress/callback',
+            passport.authorize('wordpress-oauth-server', {
+                successRedirect : '/profile',
+                failureRedirect : '/'
+            }));
+
     // google ---------------------------------
 
         // send to google to do the authentication
@@ -169,6 +193,15 @@ module.exports = function(app, passport) {
     app.get('/unlink/twitter', isLoggedIn, function(req, res) {
         var user           = req.user;
         user.twitter.token = undefined;
+        user.save(function(err) {
+            res.redirect('/profile');
+        });
+    });
+
+    // wordpress ---------------------------------
+    app.get('/unlink/wordpress', isLoggedIn, function(req, res) {
+        var user          = req.user;
+        user.wordpress.token = undefined;
         user.save(function(err) {
             res.redirect('/profile');
         });
